@@ -2,8 +2,8 @@
 author:
   name: "Alioth4J"
 date: 2024-06-27
-linktitle: 转向Linux
-title: 转向Linux
+linktitle: 转向 Linux
+title: 转向 Linux
 type:
 - post
 - posts
