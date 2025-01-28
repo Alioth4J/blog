@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>OO on Alioth4J&#39;s blog</title>
+        <link>http://localhost:1313/categories/oo/</link>
+        <description>Recent content in OO on Alioth4J&#39;s blog</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <copyright>Alioth4J</copyright>
+        <lastBuildDate>Thu, 17 Oct 2024 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/categories/oo/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>面向对象设计（业务篇）</title>
+        <link>http://localhost:1313/p/oo-design-biz/</link>
+        <pubDate>Thu, 17 Oct 2024 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/p/oo-design-biz/</guid>
+        <description>&lt;h2 id=&#34;需求分析&#34;&gt;需求分析
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;业务无非 CRUD&lt;/li&gt;
+&lt;li&gt;设计一个业务时，思考与其他业务的关联&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;架构设计&#34;&gt;架构设计
+&lt;/h2&gt;&lt;h3 id=&#34;模块的拆分&#34;&gt;模块的拆分
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;将不同的功能划分到不同的模块，在模块层面达到高内聚、低耦合&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;模块之间的调用&#34;&gt;模块之间的调用
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;同层之间的模块可以通过同步接口调用&lt;/li&gt;
+&lt;li&gt;上下层系统之间可以使用消息中间件异步调用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;模块内部&#34;&gt;模块内部
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;IoC/DI&lt;/li&gt;
+&lt;li&gt;MVC&lt;/li&gt;
+&lt;li&gt;DDD&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;类的设计&#34;&gt;类的设计
+&lt;/h2&gt;&lt;h3 id=&#34;需要哪些类&#34;&gt;需要哪些类
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;MVC 的接口和实现类&lt;/li&gt;
+&lt;li&gt;POJO&lt;/li&gt;
+&lt;li&gt;工具类&lt;/li&gt;
+&lt;li&gt;&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;设计原则和设计模式&#34;&gt;设计原则和设计模式
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;时刻考虑设计原则（SOLID、基于接口而非实现编程等）&lt;/li&gt;
+&lt;li&gt;思考哪些地方能用上设计模式，常用策略模式、模板方法模式、责任链模式&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;接口的设计&#34;&gt;接口的设计
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;要符合接口隔离原则，粒度要小&lt;/li&gt;
+&lt;li&gt;在细粒度的接口外使用粗粒度的接口进行一次封装，给外部调用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;功能设计&#34;&gt;功能设计
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;需要干啥就干啥&lt;/li&gt;
+&lt;li&gt;使用已有的专门的类，如线程池等&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;扩展重构&#34;&gt;扩展、重构
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;添加新的功能以满足发展的业务需求&lt;/li&gt;
+&lt;li&gt;通过重构提高代码质量&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

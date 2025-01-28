@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>6.824 on Alioth4J&#39;s blog</title>
+        <link>http://localhost:1313/categories/6.824/</link>
+        <description>Recent content in 6.824 on Alioth4J&#39;s blog</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <copyright>Alioth4J</copyright>
+        <lastBuildDate>Mon, 01 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/categories/6.824/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>主备复制与故障容错系统设计</title>
+        <link>http://localhost:1313/p/vm-ft/</link>
+        <pubDate>Mon, 01 Jul 2024 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/p/vm-ft/</guid>
+        <description>&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;檐上踏月客，屏息听完莫入迷&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;介绍&#34;&gt;介绍
+&lt;/h2&gt;&lt;p&gt;VMware 的论文《The Design of a Practical System for Fault-Tolerant Virtual Machines》中提出了一种以主备复制进行故障容错的系统设计，这个容错机制用于在出现单点故障等情况下保障系统的可用性&lt;/p&gt;
+&lt;h2 id=&#34;基础架构&#34;&gt;基础架构
+&lt;/h2&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;               │                                                             
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;               │    ┌──────────────────┐                 ┌──────────────────┐
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;┌──────────┐   │    │  ┌────────────┐  │ logging channel │  ┌───────────┐   │
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;│          │   │    │  │ Primary VM ┼──┼─────────────────┼──► Backup VM │   │
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;│  Client  ┼───┼────►  └────────────┘  │                 │  └───────────┘   │
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;│          │   │    │                  │                 │                  │
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;└──────────┘   │    │ Physical server  │                 │ Physical server  │
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;               │    │                  │                 │                  │
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;               │    └────────┬─────────┘                 └─────────┬────────┘
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;               │             │                                     │         
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;               │             │                                     │         
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;               │             │                                     │         
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;               │             │                                     │         
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;               │             │                                     │         
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;               │             │          ┌─────────────────┐        │         
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;               │             │          │                 │        │         
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;               │             └──────────┤   Shared disk   ┼────────┘         
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                                        │                 │                  
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                                        └─────────────────┘                  
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                                                                             
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;两台虚拟机，primary 和 backup，分别运行在&lt;strong&gt;两台物理机器&lt;/strong&gt;上&lt;/li&gt;
+&lt;li&gt;primary 和 backup 共享磁盘&lt;/li&gt;
+&lt;li&gt;client 只与 primary 进行交互，目标是让 client 认为（就像是）只有一台机器，对容错毫不知情&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;状态机与确定性重放&#34;&gt;状态机与确定性重放
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;如果初始状态相同，在确定性系统中以相同顺序执行相同的指令，那么结束状态也相同&lt;/li&gt;
+&lt;li&gt;primary 与 backup 初始状态相同，backup 执行与 primary 相同的指令，这能够保证 primary 与 backup 的一致性。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;主备之间的通信&#34;&gt;主备之间的通信
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;primary 和 backup 分别有一块 log buffer&lt;/li&gt;
+&lt;li&gt;primary 将指令写入自己的 log buffer，通过 logging channel 发送给 backup，backup 将指令从网络中接收到自己的 log buffer 中后回复 &lt;code&gt;ACK&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;输出机制&#34;&gt;输出机制
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;primary 执行指令并产生输出； backup 只是执行指令，不产生输出&lt;/li&gt;
+&lt;li&gt;只有当 primary 接收到 backup 回复的 &lt;code&gt;ACK&lt;/code&gt; 后，才向 client 输出&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;注意：性能问题&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;优化1：面对读请求，primary 是否无需等待？&lt;/li&gt;
+&lt;li&gt;优化2：应用层的处理机制&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;故障转移&#34;&gt;故障转移
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;当 primary 出现故障，由 backup 接管 primary 的工作，而 client 毫不知情&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;防止脑裂&#34;&gt;防止脑裂
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;共享磁盘支持一个原子的 &lt;code&gt;test-and-set&lt;/code&gt; 操作，在 backup 接管之前进行这个操作，如果两个服务器都存活，这个操作就会失败，避免了脑裂&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;更多&#34;&gt;更多
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;磁盘发生故障时系统将无法继续提供服务，一种可行的解决方案是备份磁盘&lt;/li&gt;
+&lt;li&gt;复制状态机方法对于多 CPU 主机有局限性，VM-FT 经过多年的发展，从复制状态机方法转向状态转移方法，以提供对多 CPU 的支持&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>
