@@ -7,20 +7,28 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>Alioth4J</copyright>
-        <lastBuildDate>Wed, 13 Nov 2024 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/categories/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>Linux</title>
-        <link>http://localhost:1313/categories/linux/</link>
-        <pubDate>Wed, 13 Nov 2024 00:00:00 +0000</pubDate>
+        <lastBuildDate>Wed, 29 Jan 2025 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Design Patterns</title>
+        <link>http://localhost:1313/categories/design-patterns/</link>
+        <pubDate>Wed, 29 Jan 2025 00:00:00 +0000</pubDate>
         
-        <guid>http://localhost:1313/categories/linux/</guid>
+        <guid>http://localhost:1313/categories/design-patterns/</guid>
         <description></description>
         </item>
         <item>
         <title>Java</title>
         <link>http://localhost:1313/categories/java/</link>
-        <pubDate>Thu, 17 Oct 2024 00:00:00 +0000</pubDate>
+        <pubDate>Wed, 29 Jan 2025 00:00:00 +0000</pubDate>
         
         <guid>http://localhost:1313/categories/java/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Linux</title>
+        <link>http://localhost:1313/categories/linux/</link>
+        <pubDate>Wed, 13 Nov 2024 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/categories/linux/</guid>
         <description></description>
         </item>
         <item>
@@ -37,14 +45,6 @@
         <pubDate>Wed, 28 Aug 2024 00:00:00 +0000</pubDate>
         
         <guid>http://localhost:1313/categories/spring/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>Design Patterns</title>
-        <link>http://localhost:1313/categories/design-patterns/</link>
-        <pubDate>Fri, 16 Aug 2024 00:00:00 +0000</pubDate>
-        
-        <guid>http://localhost:1313/categories/design-patterns/</guid>
         <description></description>
         </item>
         <item>

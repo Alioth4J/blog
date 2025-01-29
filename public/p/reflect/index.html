@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
     <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="将方法与方法参数解耦">
-<title>建造者模式构建方法参数</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="com.alioth4j.reflect">
+<title>Use Reflection Like the Builder Pattern</title>
 
-<link rel='canonical' href='http://localhost:1313/p/builder-parameter/'>
+<link rel='canonical' href='http://localhost:1313/p/reflect/'>
 
-<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="建造者模式构建方法参数">
-<meta property='og:description' content="将方法与方法参数解耦">
-<meta property='og:url' content='http://localhost:1313/p/builder-parameter/'>
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="Use Reflection Like the Builder Pattern">
+<meta property='og:description' content="com.alioth4j.reflect">
+<meta property='og:url' content='http://localhost:1313/p/reflect/'>
 <meta property='og:site_name' content='Alioth4J&#39;s blog'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-05-25T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-05-25T00:00:00&#43;00:00'/>
-<meta name="twitter:title" content="建造者模式构建方法参数">
-<meta name="twitter:description" content="将方法与方法参数解耦">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2025-01-29T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-01-29T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="Use Reflection Like the Builder Pattern">
+<meta name="twitter:description" content="com.alioth4j.reflect">
     <link rel="shortcut icon" href="https://cr.openjdk.org/~jeff/Duke/3d-preview/openduke.png" />
 
     </head>
@@ -247,19 +247,29 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#minio中使用建造者模式构建方法的参数">MinIO中使用建造者模式构建方法的参数</a>
+    <li><a href="#conceptions">Conceptions</a></li>
+    <li><a href="#step-by-step-usage">Step-by-Step Usage</a>
       <ol>
-        <li><a href="#将多个参数传入--中的问题">将多个参数传入 <code>()</code> 中的问题</a></li>
+        <li><a href="#step-1-instantiate">Step 1: Instantiate</a></li>
+        <li><a href="#step-2-invoke-methods">Step 2: Invoke methods</a></li>
+        <li><a href="#step-3-get-the-instance">Step 3: Get the instance</a></li>
       </ol>
     </li>
-    <li><a href="#使用建造者模式构建方法参数的优点">使用建造者模式构建方法参数的优点</a>
+    <li><a href="#an-usage-example">An Usage Example</a></li>
+    <li><a href="#implementation">Implementation</a>
       <ol>
-        <li><a href="#提供了一种规范">提供了一种规范</a></li>
-        <li><a href="#便于参数构建">便于参数构建</a></li>
-        <li><a href="#符合开闭原则">符合开闭原则</a></li>
+        <li><a href="#public-class-reflecti">public class Reflect<I></a>
+          <ol>
+            <li><a href="#generics">Generics</a></li>
+            <li><a href="#fields">Fields</a></li>
+            <li><a href="#constructors">Constructors</a></li>
+            <li><a href="#methods">Methods</a></li>
+          </ol>
+        </li>
+        <li><a href="#public-class-reflectexception">public class ReflectException</a></li>
       </ol>
     </li>
-    <li><a href="#好处来源于解耦">好处来源于解耦</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
   </ol>
 </nav>
         </div>
@@ -296,12 +306,12 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/p/builder-parameter/">建造者模式构建方法参数</a>
+            <a href="/p/reflect/">Use Reflection Like the Builder Pattern</a>
         </h2>
     
         
         <h3 class="article-subtitle">
-            将方法与方法参数解耦
+            com.alioth4j.reflect
         </h3>
         
     </div>
@@ -322,7 +332,7 @@
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published">May 25, 2024</time>
+                <time class="article-time--published">Jan 29, 2025</time>
             </div>
         
 
@@ -338,9 +348,74 @@
     <section class="article-content">
     
     
-    <h2 id="minio中使用建造者模式构建方法的参数">MinIO中使用建造者模式构建方法的参数
-</h2><p>例如：</p>
+    <h2 id="conceptions">Conceptions
+</h2><p>Traditional reflection can often lead to verbose code. For instance, <code>setAccessible(true)</code> is a kind of regular code snippet. In <code>com.alioth4j.reflect</code> library, I <strong>encapsulate the regular usage of reflection API</strong> to simplify the processes of object creation and method invocation.<br>
+Meanwhile, drawing inspiration from the Builder pattern, I reimagine the way to use reflection: <strong>method chaining</strong>. This approach enchances code readability and mainainability.</p>
+<h2 id="step-by-step-usage">Step-by-Step Usage
+</h2><h3 id="step-1-instantiate">Step 1: Instantiate
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="k">new</span><span class="w"> </span><span class="n">Reflect</span><span class="o">&lt;</span><span class="n">MyClass</span><span class="o">&gt;</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">.</span><span class="na">clazz</span><span class="p">(</span><span class="n">MyClass</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">.</span><span class="na">construct</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;?&gt;[]</span><span class="w"> </span><span class="n">parameterTypes</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="o">[]</span><span class="w"> </span><span class="n">parameterValues</span><span class="p">)</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>or</p>
 <div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="k">new</span><span class="w"> </span><span class="n">Reflect</span><span class="o">&lt;</span><span class="n">MyClass</span><span class="o">&gt;</span><span class="p">(</span><span class="n">MyClass</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">Class</span><span class="o">&lt;?&gt;[]</span><span class="w"> </span><span class="n">constructorParameterTypes</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="o">[]</span><span class="w"> </span><span class="n">constructorParameterValues</span><span class="p">)</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>or</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="k">new</span><span class="w"> </span><span class="n">Reflect</span><span class="o">&lt;</span><span class="n">MyClass</span><span class="o">&gt;</span><span class="p">(</span><span class="n">existingObject</span><span class="p">)</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>or</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="k">new</span><span class="w"> </span><span class="n">Reflect</span><span class="o">&lt;</span><span class="n">MyClass</span><span class="o">&gt;</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">.</span><span class="na">exist</span><span class="p">(</span><span class="n">existingObject</span><span class="p">)</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="step-2-invoke-methods">Step 2: Invoke methods
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="p">.</span><span class="na">set</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">fieldName</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="w"> </span><span class="n">fieldValue</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">.</span><span class="na">set</span><span class="p">(</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="cm">/* fieldName */</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="cm">/* fieldValue */</span><span class="o">&gt;</span><span class="w"> </span><span class="n">setterMap</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">.</span><span class="na">invoke</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">methodName</span><span class="p">,</span><span class="w"> </span><span class="n">Class</span><span class="o">&lt;?&gt;[]</span><span class="w"> </span><span class="n">parameterTypes</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="o">[]</span><span class="w"> </span><span class="n">parameterValues</span><span class="p">)</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="step-3-get-the-instance">Step 3: Get the instance
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="p">.</span><span class="na">reflect</span><span class="p">()</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="an-usage-example">An Usage Example
+</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -350,36 +425,45 @@
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">PutObjectArgs putObjectArgs = PutObjectArgs.builder()
-</span></span><span class="line"><span class="cl">                    .bucket(BUCKET_NAME)
-</span></span><span class="line"><span class="cl">                    .object(objectName)
-</span></span><span class="line"><span class="cl">                    .contentType(file.getContentType())
-</span></span><span class="line"><span class="cl">                    .stream(file.getInputStream(), file.getSize(), ObjectWriteArgs.MIN_MULTIPART_SIZE).build();
-</span></span><span class="line"><span class="cl">minioClient.putObject(putObjectArgs);
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">MyClass</span><span class="w"> </span><span class="n">myInstance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Reflect</span><span class="o">&lt;</span><span class="n">MyClass</span><span class="o">&gt;</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">clazz</span><span class="p">(</span><span class="n">MyClass</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">construct</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;?&gt;[]</span><span class="w"> </span><span class="n">parameterTypes</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="o">[]</span><span class="w"> </span><span class="n">parameterValues</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">set</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">fieldName</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="w"> </span><span class="n">fieldValue</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">invoke</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">methodName</span><span class="p">,</span><span class="w"> </span><span class="n">Class</span><span class="o">&lt;?&gt;[]</span><span class="w"> </span><span class="n">parameterTypes</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="o">[]</span><span class="w"> </span><span class="n">parameterValues</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">reflect</span><span class="p">();</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="将多个参数传入--中的问题">将多个参数传入 <code>()</code> 中的问题
-</h3><ul>
-<li>可读性较差<br>
-一行代码过长，分多行也不够明确<br>
-参数对应的是什么，需要记住或者 IDE 提示</li>
-<li>可能导致错误重载<br>
-见《Effective Java》第52条</li>
-<li>违反开闭原则<br>
-当需要新增、删除、修改参数时，需要修改方法签名</li>
+</div><h2 id="implementation">Implementation
+</h2><h3 id="public-class-reflecti">public class Reflect<I>
+</h3><h4 id="generics">Generics
+</h4><p>Use <code>&lt;I&gt;</code> to improve type safety.</p>
+<h4 id="fields">Fields
+</h4><p>Two fields:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">private</span><span class="w"> </span><span class="n">Class</span><span class="o">&lt;?</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">I</span><span class="o">&gt;</span><span class="w"> </span><span class="n">clazz</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">private</span><span class="w"> </span><span class="n">I</span><span class="w"> </span><span class="n">instance</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="constructors">Constructors
+</h4><p>Constructor is (part of) the instantiation step. Just fill in the fields.</p>
+<h4 id="methods">Methods
+</h4><ul>
+<li>Encapsulate the reflection API inside.</li>
+<li>Return <code>this</code> object to support method chaining.</li>
 </ul>
-<h2 id="使用建造者模式构建方法参数的优点">使用建造者模式构建方法参数的优点
-</h2><h3 id="提供了一种规范">提供了一种规范
-</h3><p>方法入参唯一，是 <code>methodNameArgs</code></p>
-<h3 id="便于参数构建">便于参数构建
+<h3 id="public-class-reflectexception">public class ReflectException
 </h3><ul>
-<li>链式调用清晰明了（编码、阅读、维护）</li>
-<li>各个参数的设置可选择，提供了灵活性</li>
+<li>Thrown when an exception occurs during the usage of <code>com.alioth4j.reflect.Reflect</code></li>
+<li>It is an encapsulation of the reflection-related exceptions, providing an unified way to handle exceptions</li>
+<li>As reflection is an unsafe mechanism itself, the safety should be guaranteed by the user</li>
 </ul>
-<h3 id="符合开闭原则">符合开闭原则
-</h3><p>需要新增、删除、修改参数时，不需要修改方法签名，只需要修改参数对应的类</p>
-<h2 id="好处来源于解耦">好处来源于解耦
-</h2><p>方法与方法参数之间解耦</p>
+<h2 id="conclusion">Conclusion
+</h2><p>With the elegance of the Builder pattern, this library offers developers a simpler and cleaner way to leverage reflection in Java applications.</p>
 
 </section>
 
@@ -416,32 +500,6 @@
             
                 
 <article class="">
-    <a href="/p/spring-boot-components-integration-process/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">Spring Boot 组件集成流程</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
-    <a href="/p/reflect/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">Use Reflection Like the Builder Pattern</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
     <a href="/p/oo-design-biz/">
         
         
@@ -474,6 +532,32 @@
 
         <div class="article-details">
             <h2 class="article-title">IDEA 左侧项目目录消失问题 解决方案</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/mini-spring-mvc/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">手写 MiniSpring 之 MVC</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/mini-spring-ioc/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">手写 MiniSpring 之 IoC</h2>
         </div>
     </a>
 </article>
