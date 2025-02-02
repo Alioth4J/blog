@@ -37,3 +37,36 @@ rpm-ostree 的版本控制机制能够切换和回滚到不同的系统版本，
 
 ## 最后
 Silverblue 的设计充满魅力，不要犹豫去使用！  
+
+## Appendix
+### Install Nvidia Driver and Cuda on Silverblue
+#### Useful Links
+- [Configuration - RPM Fusion](https://rpmfusion.org/Configuration)  
+- [Howto/NVIDIA - RPM Fusion](https://rpmfusion.org/Howto/NVIDIA#OSTree_.28Silverblue.2FKinoite.2Fetc.29)  
+#### Steps
+Secure boot MAY need to be turned off  
+Enable repository
+```bash
+sudo rpm-ostree install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+```
+then reboot
+```bash
+sudo systemctl reboot
+```
+then
+```bash
+sudo rpm-ostree install akmod-nvidia xorg-x11-drv-nvidia xorg-x11-drv-nvidia-cuda
+```
+then reboot
+```bash
+sudo systemctl reboot
+```
+then use `nvidia-smi` to check whether it is okay, if not, also need the following command
+```bash
+sudo rpm-ostree kargs --append=rd.driver.blacklist=nouveau --append=modprobe.blacklist=nouveau --append=nvidia-drm.modeset=1
+```
+then reboot
+```bash
+sudo systemctl reboot
+```
+

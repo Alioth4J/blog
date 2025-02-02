@@ -253,6 +253,16 @@
     <li><a href="#无缝衔接的体验">无缝衔接的体验</a></li>
     <li><a href="#不要停止前进">不要停止前进</a></li>
     <li><a href="#最后">最后</a></li>
+    <li><a href="#appendix">Appendix</a>
+      <ol>
+        <li><a href="#install-nvidia-driver-and-cuda-on-silverblue">Install Nvidia Driver and Cuda on Silverblue</a>
+          <ol>
+            <li><a href="#useful-links">Useful Links</a></li>
+            <li><a href="#steps">Steps</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
   </ol>
 </nav>
         </div>
@@ -347,7 +357,72 @@
 <p>rpm-ostree 的版本控制机制能够切换和回滚到不同的系统版本，使用户能够大胆尝试新的版本；容器化应用则让用户不必担心对主系统产生不良影响。</p>
 <h2 id="最后">最后
 </h2><p>Silverblue 的设计充满魅力，不要犹豫去使用！</p>
-
+<h2 id="appendix">Appendix
+</h2><h3 id="install-nvidia-driver-and-cuda-on-silverblue">Install Nvidia Driver and Cuda on Silverblue
+</h3><h4 id="useful-links">Useful Links
+</h4><ul>
+<li><a class="link" href="https://rpmfusion.org/Configuration"  target="_blank" rel="noopener"
+    >Configuration - RPM Fusion</a></li>
+<li><a class="link" href="https://rpmfusion.org/Howto/NVIDIA#OSTree_.28Silverblue.2FKinoite.2Fetc.29"  target="_blank" rel="noopener"
+    >Howto/NVIDIA - RPM Fusion</a></li>
+</ul>
+<h4 id="steps">Steps
+</h4><p>Secure boot MAY need to be turned off<br>
+Enable repository</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo rpm-ostree install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-<span class="k">$(</span>rpm -E %fedora<span class="k">)</span>.noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-<span class="k">$(</span>rpm -E %fedora<span class="k">)</span>.noarch.rpm
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>then reboot</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo systemctl reboot
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>then</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo rpm-ostree install akmod-nvidia xorg-x11-drv-nvidia xorg-x11-drv-nvidia-cuda
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>then reboot</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo systemctl reboot
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>then use <code>nvidia-smi</code> to check whether it is okay, if not, also need the following command</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo rpm-ostree kargs --append<span class="o">=</span>rd.driver.blacklist<span class="o">=</span>nouveau --append<span class="o">=</span>modprobe.blacklist<span class="o">=</span>nouveau --append<span class="o">=</span>nvidia-drm.modeset<span class="o">=</span><span class="m">1</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>then reboot</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo systemctl reboot
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
 </section>
 
 
