@@ -44,8 +44,9 @@ Silverblue 的设计充满魅力，不要犹豫去使用！
 - [Configuration - RPM Fusion](https://rpmfusion.org/Configuration)  
 - [Howto/NVIDIA - RPM Fusion](https://rpmfusion.org/Howto/NVIDIA#OSTree_.28Silverblue.2FKinoite.2Fetc.29)  
 #### Steps
-Secure boot MAY need to be turned off  
-Enable repository
+*Note: Secure boot MAY need to be turned off*  
+
+First of all, enable repository
 ```bash
 sudo rpm-ostree install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 ```
