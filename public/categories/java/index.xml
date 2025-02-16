@@ -195,8 +195,7 @@ Meanwhile, drawing inspiration from the Builder pattern, I reimagine the way to 
         
         <guid>http://localhost:1313/p/access-private-field/</guid>
         <description>&lt;blockquote&gt;
-&lt;p&gt;&lt;em&gt;笑问客从何处来&lt;/em&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;&lt;em&gt;笑问客从何处来&lt;/em&gt;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;代码&#34;&gt;代码
 &lt;/h2&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -281,8 +280,7 @@ Meanwhile, drawing inspiration from the Builder pattern, I reimagine the way to 
         
         <guid>http://localhost:1313/p/mini-spring-mvc/</guid>
         <description>&lt;blockquote&gt;
-&lt;p&gt;&lt;em&gt;每当仰望山巅，我就感到如坠深渊，于是我便开始攀登&lt;/em&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;&lt;em&gt;每当仰望山巅，我就感到如坠深渊，于是我便开始攀登&lt;/em&gt;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;复用初始的-mvc&#34;&gt;复用：初始的 MVC
 &lt;/h2&gt;&lt;p&gt;MiniSpring 使用 Tomcat 作为服务器，初始的 MVC 与 IoC 类似，可以复用 IoC 的代码&lt;br&gt;
 beans.xml：&lt;/p&gt;
@@ -1864,8 +1862,7 @@ ModelAndView：&lt;/p&gt;
         
         <guid>http://localhost:1313/p/mini-spring-ioc/</guid>
         <description>&lt;blockquote&gt;
-&lt;p&gt;&lt;em&gt;每当仰望山巅，我就感到如坠深渊，于是我便开始攀登&lt;/em&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;&lt;em&gt;每当仰望山巅，我就感到如坠深渊，于是我便开始攀登&lt;/em&gt;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;配置与代码分离xml&#34;&gt;配置与代码分离：XML
 &lt;/h2&gt;&lt;p&gt;在 XML 文件中配置 Bean，可以将应用程序的可变部分与固定的框架代码分开，增加框架的灵活性，同时便于后续框架的扩展。&lt;br&gt;
 一个简单的例子：&lt;/p&gt;

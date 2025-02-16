@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Go on Alioth4J&#39;s blog</title>
+        <link>http://localhost:1313/categories/go/</link>
+        <description>Recent content in Go on Alioth4J&#39;s blog</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <copyright>Alioth4J</copyright>
+        <lastBuildDate>Sun, 16 Feb 2025 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/categories/go/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Fixing Import Block Vanishment While Coding in Goland</title>
+        <link>http://localhost:1313/p/goland-autoimport-fix/</link>
+        <pubDate>Sun, 16 Feb 2025 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/p/goland-autoimport-fix/</guid>
+        <description>&lt;h2 id=&#34;trouble&#34;&gt;Trouble
+&lt;/h2&gt;&lt;p&gt;Pressing &lt;code&gt;Enter&lt;/code&gt; after typing &lt;code&gt;import (&lt;/code&gt; in Goland IDE will lead to an immediate vanishment of the import block.&lt;/p&gt;
+&lt;p&gt;&lt;video controls src=&#34;goland-import-trouble.webm&#34;&gt;&lt;/video&gt;&lt;/p&gt;
+&lt;h2 id=&#34;why-does-the-import-block-vanish&#34;&gt;Why Does the Import Block Vanish?
+&lt;/h2&gt;&lt;p&gt;Goland&amp;rsquo;s default settings trigger automated format rules.&lt;/p&gt;
+&lt;p&gt;Specifically:&lt;br&gt;
+After pressing &lt;code&gt;Enter&lt;/code&gt;, the formating function was triggered, and it removes the import block.&lt;/p&gt;
+&lt;h2 id=&#34;fix&#34;&gt;Fix
+&lt;/h2&gt;&lt;p&gt;Settings -&amp;gt; Go -&amp;gt; Imports -&amp;gt; &lt;strong&gt;Disable&lt;/strong&gt; &amp;ldquo;Optimize imports on the fly&amp;rdquo;&lt;/p&gt;
+&lt;h2 id=&#34;happy-coding&#34;&gt;Happy Coding!
+&lt;/h2&gt;</description>
+        </item>
+        
+    </channel>
+</rss>

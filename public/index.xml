@@ -7,7 +7,25 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>Alioth4J</copyright>
-        <lastBuildDate>Wed, 29 Jan 2025 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 16 Feb 2025 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Fixing Import Block Vanishment While Coding in Goland</title>
+        <link>http://localhost:1313/p/goland-autoimport-fix/</link>
+        <pubDate>Sun, 16 Feb 2025 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/p/goland-autoimport-fix/</guid>
+        <description>&lt;h2 id=&#34;trouble&#34;&gt;Trouble
+&lt;/h2&gt;&lt;p&gt;Pressing &lt;code&gt;Enter&lt;/code&gt; after typing &lt;code&gt;import (&lt;/code&gt; in Goland IDE will lead to an immediate vanishment of the import block.&lt;/p&gt;
+&lt;p&gt;&lt;video controls src=&#34;goland-import-trouble.webm&#34;&gt;&lt;/video&gt;&lt;/p&gt;
+&lt;h2 id=&#34;why-does-the-import-block-vanish&#34;&gt;Why Does the Import Block Vanish?
+&lt;/h2&gt;&lt;p&gt;Goland&amp;rsquo;s default settings trigger automated format rules.&lt;/p&gt;
+&lt;p&gt;Specifically:&lt;br&gt;
+After pressing &lt;code&gt;Enter&lt;/code&gt;, the formating function was triggered, and it removes the import block.&lt;/p&gt;
+&lt;h2 id=&#34;fix&#34;&gt;Fix
+&lt;/h2&gt;&lt;p&gt;Settings -&amp;gt; Go -&amp;gt; Imports -&amp;gt; &lt;strong&gt;Disable&lt;/strong&gt; &amp;ldquo;Optimize imports on the fly&amp;rdquo;&lt;/p&gt;
+&lt;h2 id=&#34;happy-coding&#34;&gt;Happy Coding!
+&lt;/h2&gt;</description>
+        </item>
+        <item>
         <title>Use Reflection Like the Builder Pattern</title>
         <link>http://localhost:1313/p/reflect/</link>
         <pubDate>Wed, 29 Jan 2025 00:00:00 +0000</pubDate>
@@ -142,8 +160,7 @@ Meanwhile, drawing inspiration from the Builder pattern, I reimagine the way to 
 The following commands are executed with root privileges.&lt;/p&gt;
 &lt;h2 id=&#34;install-docker-ce-and-docker-compose&#34;&gt;Install docker-ce and docker-compose
 &lt;/h2&gt;&lt;blockquote&gt;
-&lt;p&gt;Use a mirror if the default url is not accessible.&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;Use a mirror if the default url is not accessible.&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;Set up the docker repository:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -420,8 +437,7 @@ The following commands are executed with root privileges.&lt;/p&gt;
         
         <guid>http://localhost:1313/p/silverblue/</guid>
         <description>&lt;blockquote&gt;
-&lt;p&gt;&lt;em&gt;平衡 忠诚 不息&lt;/em&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;&lt;em&gt;平衡 忠诚 不息&lt;/em&gt;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;银蓝&#34;&gt;“银蓝”
 &lt;/h2&gt;&lt;p&gt;首先名字就很好听，哈哈&amp;hellip;&lt;/p&gt;
 &lt;h2 id=&#34;隔离变化与不变&#34;&gt;隔离变化与不变
@@ -570,8 +586,7 @@ The following commands are executed with root privileges.&lt;/p&gt;
         
         <guid>http://localhost:1313/p/access-private-field/</guid>
         <description>&lt;blockquote&gt;
-&lt;p&gt;&lt;em&gt;笑问客从何处来&lt;/em&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;&lt;em&gt;笑问客从何处来&lt;/em&gt;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;代码&#34;&gt;代码
 &lt;/h2&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -656,8 +671,7 @@ The following commands are executed with root privileges.&lt;/p&gt;
         
         <guid>http://localhost:1313/p/mini-spring-mvc/</guid>
         <description>&lt;blockquote&gt;
-&lt;p&gt;&lt;em&gt;每当仰望山巅，我就感到如坠深渊，于是我便开始攀登&lt;/em&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;&lt;em&gt;每当仰望山巅，我就感到如坠深渊，于是我便开始攀登&lt;/em&gt;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;复用初始的-mvc&#34;&gt;复用：初始的 MVC
 &lt;/h2&gt;&lt;p&gt;MiniSpring 使用 Tomcat 作为服务器，初始的 MVC 与 IoC 类似，可以复用 IoC 的代码&lt;br&gt;
 beans.xml：&lt;/p&gt;
@@ -2239,8 +2253,7 @@ ModelAndView：&lt;/p&gt;
         
         <guid>http://localhost:1313/p/mini-spring-ioc/</guid>
         <description>&lt;blockquote&gt;
-&lt;p&gt;&lt;em&gt;每当仰望山巅，我就感到如坠深渊，于是我便开始攀登&lt;/em&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;&lt;em&gt;每当仰望山巅，我就感到如坠深渊，于是我便开始攀登&lt;/em&gt;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;配置与代码分离xml&#34;&gt;配置与代码分离：XML
 &lt;/h2&gt;&lt;p&gt;在 XML 文件中配置 Bean，可以将应用程序的可变部分与固定的框架代码分开，增加框架的灵活性，同时便于后续框架的扩展。&lt;br&gt;
 一个简单的例子：&lt;/p&gt;
@@ -3893,8 +3906,7 @@ ModelAndView：&lt;/p&gt;
         
         <guid>http://localhost:1313/p/vm-ft/</guid>
         <description>&lt;blockquote&gt;
-&lt;p&gt;&lt;em&gt;檐上踏月客，屏息听完莫入迷&lt;/em&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;&lt;em&gt;檐上踏月客，屏息听完莫入迷&lt;/em&gt;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;介绍&#34;&gt;介绍
 &lt;/h2&gt;&lt;p&gt;VMware 的论文《The Design of a Practical System for Fault-Tolerant Virtual Machines》中提出了一种以主备复制进行故障容错的系统设计，这个容错机制用于在出现单点故障等情况下保障系统的可用性&lt;/p&gt;
 &lt;h2 id=&#34;基础架构&#34;&gt;基础架构
@@ -3969,8 +3981,7 @@ ModelAndView：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;优化1：面对读请求，primary 是否无需等待？&lt;/li&gt;
 &lt;li&gt;优化2：应用层的处理机制&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;故障转移&#34;&gt;故障转移
 &lt;/h2&gt;&lt;ul&gt;
 &lt;li&gt;当 primary 出现故障，由 backup 接管 primary 的工作，而 client 毫不知情&lt;/li&gt;
