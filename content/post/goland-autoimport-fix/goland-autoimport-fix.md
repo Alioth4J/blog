@@ -17,7 +17,7 @@ Pressing `Enter` after typing `import (` in Goland IDE will lead to an immediate
 Goland's default settings trigger automated format rules.  
 
 Specifically:  
-After pressing `Enter`, the formating function was triggered, and it removes the import block.  
+After pressing `Enter`, the formatting function was triggered, and it removes the import block.  
 
 ## Fix
 Settings -> Go -> Imports -> **Disable** "Optimize imports on the fly"  
