@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="MapReduce code implementation in Golang">
+<title>MIT 6.824 Lab1 MapReduce</title>
+
+<link rel='canonical' href='http://localhost:1313/p/6.824lab1/'>
+
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="MIT 6.824 Lab1 MapReduce">
+<meta property='og:description' content="MapReduce code implementation in Golang">
+<meta property='og:url' content='http://localhost:1313/p/6.824lab1/'>
+<meta property='og:site_name' content='Alioth4J&#39;s blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2025-02-24T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-02-24T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="MIT 6.824 Lab1 MapReduce">
+<meta name="twitter:description" content="MapReduce code implementation in Golang">
+    <link rel="shortcut icon" href="https://cr.openjdk.org/~jeff/Duke/3d-preview/openduke.png" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/158060792_hu_2adef56e43eb466b.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">⚡</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">Alioth4J&#39;s blog</a></h1>
+            <h2 class="site-description">OPEN ALIOTH</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Alioth4J'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#project-overview">Project Overview</a></li>
+    <li><a href="#what-already-have">What Already Have</a></li>
+    <li><a href="#objects">Objects</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#highlights-of-the-code-implemention">Highlights of The Code Implemention</a>
+      <ol>
+        <li><a href="#twomulti-line-in-parallel">Two(Multi) line in parallel</a></li>
+        <li><a href="#where-to-store-the-status">Where to Store the Status</a></li>
+        <li><a href="#worker-works-continuously">Worker works continuously</a></li>
+        <li><a href="#the-rpc">The RPC</a></li>
+        <li><a href="#how-to-determine-the-task-type">How to determine the task type</a></li>
+        <li><a href="#work-distribution-implementation">Work Distribution Implementation</a></li>
+        <li><a href="#fault-tolerance-design">Fault-tolerance Design</a></li>
+        <li><a href="#what-does-worker-do-when-receiving-a-task">What Does Worker Do When Receiving a Task</a></li>
+        <li><a href="#what-does-master-do-when-receiving-a-result">What Does Master Do When Receiving a Result</a></li>
+      </ol>
+    </li>
+    <li><a href="#test">Test</a></li>
+    <li><a href="#conclusion">Conclusion</a>
+      <ol>
+        <li><a href="#stateless-mapreduce-and-fault-tolerance">Stateless MapReduce and Fault-tolerance</a></li>
+        <li><a href="#state-machine">State Machine</a></li>
+        <li><a href="#program--logic--control--data-structure">Program == Logic + Control + Data Structure</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+        
+        <div class="snowflake">
+            <iframe src="https://snowflake.torproject.org/embed.html" width="320" height="240" frameborder="0" scrolling="no"></iframe>
+        </div>
+    </aside>
+
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/go/" >
+                Go
+            </a>
+        
+            <a href="/categories/6.824/" >
+                6.824
+            </a>
+        
+            <a href="/categories/distributed-systems/" >
+                Distributed Systems
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/6.824lab1/">MIT 6.824 Lab1 MapReduce</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            MapReduce code implementation in Golang
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Feb 24, 2025</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="project-overview">Project Overview
+</h2><p>We are building a MapReduce system.<br>
+We are implementing a worker process that calls application Map and Reduce functions and handles reading and writing files, and a master process that hands out tasks to workers and copes with failed workers.</p>
+<h2 id="what-already-have">What Already Have
+</h2><ul>
+<li>mrmaster.go: the entrance of master program, call master later</li>
+<li>mrworker.go: the entrance of worker program, call worker later</li>
+<li>the plugin: contains Map function and Reduce function</li>
+</ul>
+<h2 id="objects">Objects
+</h2><p>use <code>struct</code> in go.</p>
+<ul>
+<li>Master</li>
+<li>Worker</li>
+<li>rpc Args and Reply</li>
+</ul>
+<p>We can define fields and methods later.</p>
+<h2 id="process">Process
+</h2><p>In this distributed system, one master and at least one worker are running in parallel.</p>
+<ol>
+<li>
+<p>In <code>Master</code> line, construct the master, then let master provide rpc service.<br>
+In <code>Worker</code> line, the worker works continuously until everything is done.</p>
+</li>
+<li>
+<p>The worker ask master for a task through rpc.</p>
+</li>
+<li>
+<p>Master determines the stage of itself. Then traverse over the tasks, determine the status of the tasks, and send uncompleted or timeout task to worker.</p>
+</li>
+<li>
+<p>The worker receives the work, determines its type, hand it to the corresponding Map or Reduce function. After completion, send the result to Master.</p>
+</li>
+<li>
+<p>Master saves the result, shuffles and sorts.</p>
+</li>
+<li>
+<p>When all the tasks are done, master changes its stage, exits the program. Workers receive a <code>Done</code> signal after asking a task exit the program.</p>
+</li>
+</ol>
+<h2 id="highlights-of-the-code-implemention">Highlights of The Code Implemention
+</h2><h3 id="twomulti-line-in-parallel">Two(Multi) line in parallel
+</h3><p>One master and at least one worker are running in parallel. The entrances of them are <code>mrmaster.go</code> and <code>mrworker.go</code>. In <code>main</code> method in <code>mrmaster.go</code>, we invoke <code>mr.MakeMaster</code> method which is defined in <code>master.go</code> to construct the master. In <code>main</code> method in <code>mrworker.go</code>, load plugin first, then invoke <code>mr.Worker</code> method, which is defined in <code>worker.go</code>, to run the worker.</p>
+<h3 id="where-to-store-the-status">Where to Store the Status
+</h3><p>In <code>Master</code>. The status are stored as <code>type Master struct</code>&rsquo;s properties.<br>
+The status includes:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl">	<span class="nx">Files</span>   <span class="p">[]</span><span class="kt">string</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">NReduce</span> <span class="kt">int</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">Stage</span>                    <span class="kt">int</span>   <span class="c1">// 0 -&gt; Map, 1 -&gt; Reduce, 2 -&gt; Done</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">MapStatus</span>                <span class="p">[]</span><span class="kt">int</span> <span class="c1">// 0 -&gt; waiting, 1 -&gt; executing, 2 -&gt; done</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">MapStartTime</span>             <span class="p">[]</span><span class="nx">time</span><span class="p">.</span><span class="nx">Time</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">CompletedMapTaskCount</span>    <span class="kt">int</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">ReduceStatus</span>             <span class="p">[]</span><span class="kt">int</span> <span class="c1">// 0 -&gt; waiting, 1 -&gt; executing, 2 -&gt; done</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">ReduceStartTime</span>          <span class="p">[]</span><span class="nx">time</span><span class="p">.</span><span class="nx">Time</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">CompletedReduceTaskCount</span> <span class="kt">int</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">ReduceWorks</span> <span class="p">[][]</span><span class="kt">string</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Besides, need a lock:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl">	<span class="nx">lock</span> <span class="nx">sync</span><span class="p">.</span><span class="nx">Mutex</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="worker-works-continuously">Worker works continuously
+</h3><p>Use a while loop in <code>Worker()</code> method, until receives a <code>Down</code> flag and <code>break</code>.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">Worker</span><span class="p">(</span><span class="nx">mapf</span> <span class="kd">func</span><span class="p">(</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">)</span> <span class="p">[]</span><span class="nx">KeyValue</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">reducef</span> <span class="kd">func</span><span class="p">(</span><span class="kt">string</span><span class="p">,</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// ...</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">		<span class="k">switch</span> <span class="nx">task</span><span class="p">.</span><span class="nx">Tpe</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// ...</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">		<span class="k">case</span> <span class="mi">2</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">			<span class="c1">// Done</span>
+</span></span><span class="line"><span class="cl">			<span class="k">break</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// ...</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="the-rpc">The RPC
+</h3><p>Note that we pass the pointer to the function.<br>
+Encapsulate to make it easier:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// send an RPC request to the master, wait for the response.</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// usually returns true.</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// returns false if something goes wrong.</span>
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">call</span><span class="p">(</span><span class="nx">rpcname</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">args</span> <span class="o">*</span><span class="nx">Args</span><span class="p">,</span> <span class="nx">reply</span> <span class="o">*</span><span class="nx">Reply</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">// c, err := rpc.DialHTTP(&#34;tcp&#34;, &#34;127.0.0.1&#34;+&#34;:1234&#34;)</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">sockname</span> <span class="o">:=</span> <span class="nf">masterSock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">c</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">rpc</span><span class="p">.</span><span class="nf">DialHTTP</span><span class="p">(</span><span class="s">&#34;unix&#34;</span><span class="p">,</span> <span class="nx">sockname</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">log</span><span class="p">.</span><span class="nf">Fatal</span><span class="p">(</span><span class="s">&#34;dialing:&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">defer</span> <span class="nx">c</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">err</span> <span class="p">=</span> <span class="nx">c</span><span class="p">.</span><span class="nf">Call</span><span class="p">(</span><span class="nx">rpcname</span><span class="p">,</span> <span class="nx">args</span><span class="p">,</span> <span class="nx">reply</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">err</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="how-to-determine-the-task-type">How to determine the task type
+</h3><p>Use a int flag in <code>Reply</code> struct to distinguish <code>Map</code>, <code>Reduce</code>, <code>Done</code> and <code>Wait</code> types of the task.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// This is the task.</span>
+</span></span><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">Reply</span> <span class="kd">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// ...</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">Tpe</span> <span class="kt">int</span> <span class="c1">// 0 -&gt; Map, 1 -&gt; Reduce, 2 -&gt; Done, 3 -&gt; Wait</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// ...</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="work-distribution-implementation">Work Distribution Implementation
+</h3><p>As said before, master holds the status. Master saved the status and the start time of the task in slices. Note that the indexes of them are correspond. When receiving a <code>AskForWork</code> call, master traverse all the tasks(Map or Reduce), judge the status of it. If the status is <code>done</code>, just continue; if the status is <code>waiting</code>, hand it to the worker; if the status is <code>executing</code>, judge whether it is timeout.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// some code omitted</span>
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">m</span> <span class="o">*</span><span class="nx">Master</span><span class="p">)</span> <span class="nf">AskForWork</span><span class="p">(</span><span class="nx">args</span> <span class="o">*</span><span class="nx">Args</span><span class="p">,</span> <span class="nx">task</span> <span class="o">*</span><span class="nx">Reply</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">m</span><span class="p">.</span><span class="nx">lock</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">	<span class="k">defer</span> <span class="nx">m</span><span class="p">.</span><span class="nx">lock</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">switch</span> <span class="nx">m</span><span class="p">.</span><span class="nx">Stage</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">case</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">		<span class="c1">// Map</span>
+</span></span><span class="line"><span class="cl">		<span class="k">for</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">status</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">m</span><span class="p">.</span><span class="nx">MapStatus</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="k">if</span> <span class="nx">status</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">status</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">status</span> <span class="o">==</span> <span class="mi">2</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="p">}</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">		<span class="c1">// wait</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">task</span><span class="p">.</span><span class="nx">Tpe</span> <span class="p">=</span> <span class="mi">3</span>
+</span></span><span class="line"><span class="cl">	<span class="k">case</span> <span class="mi">1</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">	<span class="k">case</span> <span class="mi">2</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="kc">nil</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="fault-tolerance-design">Fault-tolerance Design
+</h3><p>Master also saves start-executing time of each task. When traversing in <code>AskForWork</code> method, judge whether a task is timeout. If yes, hand it to the current worker.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl">			<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">status</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="k">if</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">After</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nx">MapStartTime</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nf">Add</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">					<span class="nx">task</span><span class="p">.</span><span class="nx">Id</span> <span class="p">=</span> <span class="nx">i</span>
+</span></span><span class="line"><span class="cl">					<span class="nx">task</span><span class="p">.</span><span class="nx">Tpe</span> <span class="p">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">					<span class="nx">task</span><span class="p">.</span><span class="nx">Filename</span> <span class="p">=</span> <span class="nx">m</span><span class="p">.</span><span class="nx">Files</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">					<span class="nx">m</span><span class="p">.</span><span class="nx">MapStatus</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="p">=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">					<span class="nx">m</span><span class="p">.</span><span class="nx">MapStartTime</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="p">=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">					<span class="k">return</span> <span class="kc">nil</span>
+</span></span><span class="line"><span class="cl">				<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">					<span class="k">continue</span>
+</span></span><span class="line"><span class="cl">				<span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>One possible sitution: If a worker fails to communicate with the master, the work will be send to another worker. In this condition two workers are executing the same work at the same time, and they will both send the result to master after completion.</p>
+<p>This is because the master cannot ask the problematic worker to stop executing (they cannot communicate with each other).</p>
+<p>So we will handle this when receiving results.</p>
+<p>In <code>FinishXxx</code> method, We use double-check lock to make sure the same result will not be saved twice.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">m</span> <span class="o">*</span><span class="nx">Master</span><span class="p">)</span> <span class="nf">FinishMap</span><span class="p">(</span><span class="nx">args</span> <span class="o">*</span><span class="nx">Args</span><span class="p">,</span> <span class="nx">reply</span> <span class="o">*</span><span class="nx">Reply</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">m</span><span class="p">.</span><span class="nx">MapStatus</span><span class="p">[</span><span class="nx">args</span><span class="p">.</span><span class="nx">Id</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">m</span><span class="p">.</span><span class="nx">lock</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="nx">m</span><span class="p">.</span><span class="nx">MapStatus</span><span class="p">[</span><span class="nx">args</span><span class="p">.</span><span class="nx">Id</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// ...</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="what-does-worker-do-when-receiving-a-task">What Does Worker Do When Receiving a Task
+</h3><p>Map task:<br>
+Get the content of the file through filename, then invoke <code>mapf</code> to execute the real Map. At last use rpc to send the result.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl">		<span class="k">case</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">			<span class="c1">// Map</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">content</span> <span class="o">:=</span> <span class="nf">getContentThroughFilename</span><span class="p">(</span><span class="nx">task</span><span class="p">.</span><span class="nx">Filename</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">kvs</span> <span class="o">:=</span> <span class="nf">mapf</span><span class="p">(</span><span class="nx">task</span><span class="p">.</span><span class="nx">Filename</span><span class="p">,</span> <span class="nx">content</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">args</span> <span class="o">:=</span> <span class="nx">Args</span><span class="p">{</span><span class="nx">task</span><span class="p">.</span><span class="nx">Id</span><span class="p">,</span> <span class="nx">kvs</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">reply</span> <span class="o">:=</span> <span class="nx">Reply</span><span class="p">{}</span>
+</span></span><span class="line"><span class="cl">			<span class="nf">call</span><span class="p">(</span><span class="s">&#34;Master.FinishMap&#34;</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">reply</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Reduce task:<br>
+Traverse the filenames, put each key-value of each file to a HashMap. After this done, traverse the HashMap, invoke <code>reducef</code> to each key-value. At last use rpc to send the result.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl">		<span class="k">case</span> <span class="mi">1</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">			<span class="c1">// Reduce</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">filenames</span> <span class="o">:=</span> <span class="nx">task</span><span class="p">.</span><span class="nx">Filenames</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">hashMap</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">][]</span><span class="kt">string</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">			<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">filename</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">filenames</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">file</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Open</span><span class="p">(</span><span class="nx">filename</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">				<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">					<span class="nx">log</span><span class="p">.</span><span class="nf">Fatalf</span><span class="p">(</span><span class="s">&#34;Cannot open %v&#34;</span><span class="p">,</span> <span class="nx">filename</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">				<span class="p">}</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">scanner</span> <span class="o">:=</span> <span class="nx">bufio</span><span class="p">.</span><span class="nf">NewScanner</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">				<span class="k">for</span> <span class="nx">scanner</span><span class="p">.</span><span class="nf">Scan</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">					<span class="nx">line</span> <span class="o">:=</span> <span class="nx">scanner</span><span class="p">.</span><span class="nf">Text</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">					<span class="nx">kv</span> <span class="o">:=</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">Split</span><span class="p">(</span><span class="nx">line</span><span class="p">,</span> <span class="s">&#34; &#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">					<span class="nx">key</span> <span class="o">:=</span> <span class="nx">kv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">					<span class="nx">value</span> <span class="o">:=</span> <span class="nx">kv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">					<span class="nx">hashMap</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">hashMap</span><span class="p">[</span><span class="nx">key</span><span class="p">],</span> <span class="nx">value</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">				<span class="p">}</span>
+</span></span><span class="line"><span class="cl">			<span class="p">}</span>
+</span></span><span class="line"><span class="cl">			<span class="kd">var</span> <span class="nx">kvs</span> <span class="p">[]</span><span class="nx">KeyValue</span>
+</span></span><span class="line"><span class="cl">			<span class="k">for</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">parts</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">hashMap</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">value</span> <span class="o">:=</span> <span class="nf">reducef</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">parts</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">kv</span> <span class="o">:=</span> <span class="nx">KeyValue</span><span class="p">{</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">kvs</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">kvs</span><span class="p">,</span> <span class="nx">kv</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">			<span class="p">}</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">args</span> <span class="o">:=</span> <span class="nx">Args</span><span class="p">{</span><span class="nx">task</span><span class="p">.</span><span class="nx">Id</span><span class="p">,</span> <span class="nx">kvs</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">reply</span> <span class="o">:=</span> <span class="nx">Reply</span><span class="p">{}</span>
+</span></span><span class="line"><span class="cl">			<span class="nf">call</span><span class="p">(</span><span class="s">&#34;Master.FinishReduce&#34;</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">reply</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="what-does-master-do-when-receiving-a-result">What Does Master Do When Receiving a Result
+</h3><p>Map task:<br>
+Save the result to a intermediate file. Save the task in <code>m.ReduceWorks[y]</code>.<br>
+The hash operation is <code>hash(key) % nReduce</code>.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl">		<span class="k">if</span> <span class="nx">m</span><span class="p">.</span><span class="nx">MapStatus</span><span class="p">[</span><span class="nx">args</span><span class="p">.</span><span class="nx">Id</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="c1">// store to &#34;mr-x-y&#34; file</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">groups</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">int</span><span class="p">][]</span><span class="nx">KeyValue</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">			<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">kv</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">args</span><span class="p">.</span><span class="nx">Kvs</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">y</span> <span class="o">:=</span> <span class="nf">ihash</span><span class="p">(</span><span class="nx">kv</span><span class="p">.</span><span class="nx">Key</span><span class="p">)</span> <span class="o">%</span> <span class="nx">m</span><span class="p">.</span><span class="nx">NReduce</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">groups</span><span class="p">[</span><span class="nx">y</span><span class="p">]</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">groups</span><span class="p">[</span><span class="nx">y</span><span class="p">],</span> <span class="nx">kv</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">			<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">			<span class="k">for</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">kvs</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">groups</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">filename</span> <span class="o">:=</span> <span class="s">&#34;mr-&#34;</span> <span class="o">+</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Itoa</span><span class="p">(</span><span class="nx">args</span><span class="p">.</span><span class="nx">Id</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#34;-&#34;</span> <span class="o">+</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Itoa</span><span class="p">(</span><span class="nx">y</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">				<span class="c1">// about the first param, can&#39;t use &#34;&#34; while using Silverblue</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">tempFile</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ioutil</span><span class="p">.</span><span class="nf">TempFile</span><span class="p">(</span><span class="s">&#34;.&#34;</span><span class="p">,</span> <span class="s">&#34;temp-&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">				<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">					<span class="k">return</span> <span class="nx">err</span>
+</span></span><span class="line"><span class="cl">				<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">				<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">kv</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">kvs</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">					<span class="nx">tempFile</span><span class="p">.</span><span class="nf">WriteString</span><span class="p">(</span><span class="nx">kv</span><span class="p">.</span><span class="nx">Key</span> <span class="o">+</span> <span class="s">&#34; &#34;</span> <span class="o">+</span> <span class="nx">kv</span><span class="p">.</span><span class="nx">Value</span> <span class="o">+</span> <span class="s">&#34;\n&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">				<span class="p">}</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">tempFile</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">				<span class="nx">os</span><span class="p">.</span><span class="nf">Rename</span><span class="p">(</span><span class="nx">tempFile</span><span class="p">.</span><span class="nf">Name</span><span class="p">(),</span> <span class="nx">filename</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">m</span><span class="p">.</span><span class="nx">ReduceWorks</span><span class="p">[</span><span class="nx">y</span><span class="p">]</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nx">ReduceWorks</span><span class="p">[</span><span class="nx">y</span><span class="p">],</span> <span class="nx">filename</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">			<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">			<span class="c1">// change the status of the work</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">m</span><span class="p">.</span><span class="nx">MapStatus</span><span class="p">[</span><span class="nx">args</span><span class="p">.</span><span class="nx">Id</span><span class="p">]</span> <span class="p">=</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">m</span><span class="p">.</span><span class="nx">CompletedMapTaskCount</span><span class="o">++</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">			<span class="c1">// change the stage of the master</span>
+</span></span><span class="line"><span class="cl">			<span class="k">if</span> <span class="nx">m</span><span class="p">.</span><span class="nx">CompletedMapTaskCount</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nx">Files</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">m</span><span class="p">.</span><span class="nx">Stage</span> <span class="p">=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">			<span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Reduce task:<br>
+Received <code>[]KeyValue</code>, use a HashMap to sort by key. At last write to the final file.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl">		<span class="k">if</span> <span class="nx">m</span><span class="p">.</span><span class="nx">ReduceStatus</span><span class="p">[</span><span class="nx">args</span><span class="p">.</span><span class="nx">Id</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">hashMap</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">			<span class="kd">var</span> <span class="nx">arrayList</span> <span class="p">[]</span><span class="kt">string</span>
+</span></span><span class="line"><span class="cl">			<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">kv</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">args</span><span class="p">.</span><span class="nx">Kvs</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">hashMap</span><span class="p">[</span><span class="nx">kv</span><span class="p">.</span><span class="nx">Key</span><span class="p">]</span> <span class="p">=</span> <span class="nx">kv</span><span class="p">.</span><span class="nx">Value</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">arrayList</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">arrayList</span><span class="p">,</span> <span class="nx">kv</span><span class="p">.</span><span class="nx">Key</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">			<span class="p">}</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">sort</span><span class="p">.</span><span class="nf">Strings</span><span class="p">(</span><span class="nx">arrayList</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">			<span class="nx">filename</span> <span class="o">:=</span> <span class="s">&#34;mr-out-&#34;</span> <span class="o">+</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Itoa</span><span class="p">(</span><span class="nx">args</span><span class="p">.</span><span class="nx">Id</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">file</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="nx">filename</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">			<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="k">return</span> <span class="nx">err</span>
+</span></span><span class="line"><span class="cl">			<span class="p">}</span>
+</span></span><span class="line"><span class="cl">			<span class="k">defer</span> <span class="nx">file</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">			<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">key</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">arrayList</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="s">&#34;%v %v\n&#34;</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">hashMap</span><span class="p">[</span><span class="nx">key</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">			<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">			<span class="c1">// change the status of the work</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">m</span><span class="p">.</span><span class="nx">ReduceStatus</span><span class="p">[</span><span class="nx">args</span><span class="p">.</span><span class="nx">Id</span><span class="p">]</span> <span class="p">=</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">m</span><span class="p">.</span><span class="nx">CompletedReduceTaskCount</span><span class="o">++</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">			<span class="c1">// change the stage of Master</span>
+</span></span><span class="line"><span class="cl">			<span class="k">if</span> <span class="nx">m</span><span class="p">.</span><span class="nx">CompletedReduceTaskCount</span> <span class="o">==</span> <span class="nx">m</span><span class="p">.</span><span class="nx">NReduce</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">m</span><span class="p">.</span><span class="nx">Stage</span> <span class="p">=</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl">			<span class="p">}</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="test">Test
+</h2><p>Passed all tests:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ sudo sh test-mr.sh
+</span></span><span class="line"><span class="cl">*** Starting wc test.
+</span></span><span class="line"><span class="cl"><span class="nb">read</span> unix @-&gt;/var/tmp/824-mr-0: read: connection reset by peer
+</span></span><span class="line"><span class="cl">2025/02/23 22:42:29 dialing:dial-http unix /var/tmp/824-mr-0: unexpected EOF
+</span></span><span class="line"><span class="cl">2025/02/23 22:42:29 cannot open 
+</span></span><span class="line"><span class="cl">2025/02/23 22:42:29 dialing:dial-http unix /var/tmp/824-mr-0: <span class="nb">read</span> unix @-&gt;/var/tmp/824-mr-0: read: connection reset by peer
+</span></span><span class="line"><span class="cl">--- wc test: PASS
+</span></span><span class="line"><span class="cl">*** Starting indexer test.
+</span></span><span class="line"><span class="cl">2025/02/23 22:42:32 dialing:dial-http unix /var/tmp/824-mr-0: <span class="nb">read</span> unix @-&gt;/var/tmp/824-mr-0: read: connection reset by peer
+</span></span><span class="line"><span class="cl">2025/02/23 22:42:32 dialing:dial-http unix /var/tmp/824-mr-0: <span class="nb">read</span> unix @-&gt;/var/tmp/824-mr-0: read: connection reset by peer
+</span></span><span class="line"><span class="cl">--- indexer test: PASS
+</span></span><span class="line"><span class="cl">*** Starting map parallelism test.
+</span></span><span class="line"><span class="cl">2025/02/23 22:42:39 dialing:dial-http unix /var/tmp/824-mr-0: <span class="nb">read</span> unix @-&gt;/var/tmp/824-mr-0: read: connection reset by peer
+</span></span><span class="line"><span class="cl">unexpected EOF
+</span></span><span class="line"><span class="cl">2025/02/23 22:42:39 cannot open 
+</span></span><span class="line"><span class="cl">--- map parallelism test: PASS
+</span></span><span class="line"><span class="cl">*** Starting reduce parallelism test.
+</span></span><span class="line"><span class="cl">2025/02/23 22:42:45 cannot open 
+</span></span><span class="line"><span class="cl">--- reduce parallelism test: PASS
+</span></span><span class="line"><span class="cl">2025/02/23 22:42:48 dialing:dial-http unix /var/tmp/824-mr-0: unexpected EOF
+</span></span><span class="line"><span class="cl">*** Starting crash test.
+</span></span><span class="line"><span class="cl">2025/02/23 22:43:13 cannot open 
+</span></span><span class="line"><span class="cl">2025/02/23 22:43:14 cannot open 
+</span></span><span class="line"><span class="cl">2025/02/23 22:43:14 cannot open 
+</span></span><span class="line"><span class="cl">2025/02/23 22:43:15 cannot open 
+</span></span><span class="line"><span class="cl">2025/02/23 22:43:15 cannot open 
+</span></span><span class="line"><span class="cl">2025/02/23 22:43:16 cannot open 
+</span></span><span class="line"><span class="cl">2025/02/23 22:43:16 cannot open 
+</span></span><span class="line"><span class="cl">2025/02/23 22:43:16 cannot open 
+</span></span><span class="line"><span class="cl">2025/02/23 22:43:17 cannot open 
+</span></span><span class="line"><span class="cl">2025/02/23 22:43:17 cannot open 
+</span></span><span class="line"><span class="cl">2025/02/23 22:43:17 cannot open 
+</span></span><span class="line"><span class="cl">2025/02/23 22:43:18 cannot open 
+</span></span><span class="line"><span class="cl">2025/02/23 22:43:18 cannot open 
+</span></span><span class="line"><span class="cl">2025/02/23 22:43:18 cannot open 
+</span></span><span class="line"><span class="cl">2025/02/23 22:43:19 cannot open 
+</span></span><span class="line"><span class="cl">2025/02/23 22:43:19 cannot open 
+</span></span><span class="line"><span class="cl">2025/02/23 22:43:19 cannot open 
+</span></span><span class="line"><span class="cl">2025/02/23 22:43:20 cannot open 
+</span></span><span class="line"><span class="cl">2025/02/23 22:43:20 cannot open 
+</span></span><span class="line"><span class="cl">2025/02/23 22:43:20 cannot open 
+</span></span><span class="line"><span class="cl">2025/02/23 22:43:21 cannot open 
+</span></span><span class="line"><span class="cl">2025/02/23 22:43:21 cannot open 
+</span></span><span class="line"><span class="cl">2025/02/23 22:43:21 cannot open 
+</span></span><span class="line"><span class="cl">2025/02/23 22:43:22 cannot open 
+</span></span><span class="line"><span class="cl">2025/02/23 22:43:22 cannot open 
+</span></span><span class="line"><span class="cl">2025/02/23 22:43:23 cannot open 
+</span></span><span class="line"><span class="cl">unexpected EOF
+</span></span><span class="line"><span class="cl">unexpected EOF
+</span></span><span class="line"><span class="cl">2025/02/23 22:43:25 dialing:dial-http unix /var/tmp/824-mr-0: unexpected EOF
+</span></span><span class="line"><span class="cl">2025/02/23 22:43:25 cannot open 
+</span></span><span class="line"><span class="cl">2025/02/23 22:43:25 cannot open 
+</span></span><span class="line"><span class="cl">--- crash test: PASS
+</span></span><span class="line"><span class="cl">*** PASSED ALL TESTS
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="conclusion">Conclusion
+</h2><h3 id="stateless-mapreduce-and-fault-tolerance">Stateless MapReduce and Fault-tolerance
+</h3><p>MapReduce is stateless in functions. This means workers can do the tasks independently and failed workers will not cause failure in the program.</p>
+<h3 id="state-machine">State Machine
+</h3><p>We are supposed to save the states, change the states, distinguish different states, and do the correct things in the corresponding state.</p>
+<h3 id="program--logic--control--data-structure">Program == Logic + Control + Data Structure
+</h3><p>The objects (structs) designed are the data structure.<br>
+The state machine is the logic.<br>
+The code implementation is the control.</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/p/goland-autoimport-fix/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Fixing Import Block Vanishment While Coding in Goland</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/p/vm-ft/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">主备复制与故障容错系统设计</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2023 - 
+        
+        2025 Alioth4J
+    </section>
+    
+    <section class="powerby">
+        
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.28a9a39180ca27a3d8511d8677f35f04ce499090fd67a54acb3ae202af017d6b.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
