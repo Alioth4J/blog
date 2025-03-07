@@ -56,7 +56,7 @@ MyClass myInstance = new Reflect<MyClass>()
 ```
 
 ## Implementation
-### public class Reflect<I>
+### `public class Reflect<I>`
 #### Generics
 Use `<I>` to improve type safety.  
 
@@ -74,11 +74,10 @@ Constructor is (part of) the instantiation step. Just fill in the fields.
 - Encapsulate the reflection API inside.
 - Return `this` object to support method chaining.
 
-### public class ReflectException
+### `public class ReflectException`
 - Thrown when an exception occurs during the usage of `com.alioth4j.reflect.Reflect`
 - It is an encapsulation of the reflection-related exceptions, providing an unified way to handle exceptions
 - As reflection is an unsafe mechanism itself, the safety should be guaranteed by the user
 
 ## Conclusion
 With the elegance of the Builder pattern, this library offers developers a simpler and cleaner way to leverage reflection in Java applications.  
-
