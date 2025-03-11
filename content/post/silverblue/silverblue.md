@@ -71,3 +71,12 @@ then reboot
 sudo systemctl reboot
 ```
 
+### Tips
+#### `~` location
+Your `~` is `/var/home/user`, not `/home/user`.  
+```bash
+user@silverblue:~$ pwd
+/var/home/user
+```
+
+Pay attention to this when setting environment variables.  
