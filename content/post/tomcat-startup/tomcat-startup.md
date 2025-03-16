@@ -17,7 +17,7 @@ Before `main` method being invoked, the static block is invoked first.
 
 The responsibility of the static block is setting `File catalinaHomeFile` and `File catalinaBaseFile`.  
 
-Firstly, set `catalinaHomeFile`.  
+#### Set `catalinaHomeFile`.  
 1. Try getting from system property.  
 ```java
 String home = System.getProperty(Constants.CATALINA_HOME_PROP);
@@ -41,7 +41,7 @@ File f = new File(userDir);
 System.setProperty(Constants.CATALINA_HOME_PROP, catalinaHomeFile.getPath());
 ```
 
-Secondly, set `catalinaBaseFile`.  
+#### Set `catalinaBaseFile`.  
 1. Try getting from system property.  
 ```java
 String base = System.getProperty(Constants.CATALINA_BASE_PROP);
@@ -68,19 +68,17 @@ try {
 
 ### `main` Method
 #### Initialization
-First, lock.  
+##### Lock
 ```java
 synchronized (daemonLock) {
 ```
 
----
-Second, create `Bootstrap` instance.  
+##### Create `Bootstrap` Instance
 ```java
 Bootstrap bootstrap = new Bootstrap();
 ```
 
----
-Third, invoke `bootstrap.init()`.  
+##### Invoke `bootstrap.init()`
 
 `init()`  
 \  
@@ -106,9 +104,8 @@ paramValues[0] = sharedLoader;
 Method method = startupInstance.getClass().getMethod(methodName, paramTypes);
 method.invoke(startupInstance, paramValues);
 ```
----
-Fourth, set the `bootstrap` instance as the `daemon`.  
 
+##### Set the `bootstrap` Instance as the `daemon`
 Currently the initialization of `bootstrap` has completed.  
 ```java
 daemon = bootstrap;
@@ -235,6 +232,7 @@ for (String arg : args) {
        isConfig = true;
     }
 }
+```
 
 #### Invoke `load()` Method
 
@@ -253,7 +251,6 @@ load()
   -> getServer().init();  
 
 ##### `initNaming()`
-
 If JDNI is enabled, it sets the relevant system properties to specify the JNDI packages and the context factory class, ensuring that the correct naming service implementation is loaded during subsequent JNDI operations.  
 ```java
 protected void initNaming() {
@@ -284,7 +281,6 @@ protected void initNaming() {
 ```
 
 ##### `parseServerXml(true)`
-
 The parameter of this method is used to identify start and stop. So this time is `true`.  
   
 First of all, set configuration source as `conf/server.xml`.    
@@ -292,6 +288,7 @@ First of all, set configuration source as `conf/server.xml`.
 ConfigFileLoader.setSource(new CatalinaBaseConfigurationSource(Bootstrap.getCatalinaBaseFile(), getConfigFile()));
 File file = configFile();
 ```
+
 There are two ways to get configuration from `server.xml`:  
 1. use `Digester` to parse xml file  
 2. use generated code  
