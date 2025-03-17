@@ -82,17 +82,17 @@ Bootstrap bootstrap = new Bootstrap();
 
 `init()`  
 \  
- -> `initClassLoaders()`  
+ |-> `initClassLoaders()`  
  |\  
- | -> create `commonLoader`, `catalinaLoader` and `sharedLoader` by `createClassLoader()` method  
+ | |-> create `commonLoader`, `catalinaLoader` and `sharedLoader` by `createClassLoader()` method  
  |  \  
- |   -> `ClassLoaderFactory.createClassLoader(repositories, parent);`  
+ |   |-> `ClassLoaderFactory.createClassLoader(repositories, parent);`  
  |  
- -> use `catalinaLoader` to load `Catalina` class  
+ |-> use `catalinaLoader` to load `Catalina` class  
  |  
- -> use reflection to set `sharedLoader` as `catalina`'s parent class loader  
+ |-> use reflection to set `sharedLoader` as `catalina`'s parent class loader  
  |  
- -> set `catalinaDaemon`  
+ |-> set `catalinaDaemon`  
 
 Highlights of reflection:  
 ```java
@@ -238,17 +238,17 @@ for (String arg : args) {
 
 load()  
  \  
-  -> if (loaded) return;  
+  |-> if (loaded) return;  
   |  
-  -> initNaming();
+  |-> initNaming();  
   |  
-  -> parseServerXml(true);  
+  |-> parseServerXml(true);  
   |  
-  -> getServer() and set  
+  |-> getServer() and set  
   |  
-  -> initStreams();  
+  |-> initStreams();  
   |  
-  -> getServer().init();  
+  |-> getServer().init();  
 
 ##### `initNaming()`
 If JDNI is enabled, it sets the relevant system properties to specify the JNDI packages and the context factory class, ensuring that the correct naming service implementation is loaded during subsequent JNDI operations.  
