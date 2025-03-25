@@ -71,8 +71,7 @@ then reboot
 sudo systemctl reboot
 ```
 
-### Tips
-#### `~` location
+### `~` location
 Your `~` is `/var/home/user`, not `/home/user`.  
 ```bash
 user@silverblue:~$ pwd
@@ -80,3 +79,13 @@ user@silverblue:~$ pwd
 ```
 
 Pay attention to this when setting environment variables.  
+
+### How to Use docker-compose
+I have not found a way.  
+
+Here are some replacements of docker-compose:  
+- podman-compose
+- Linux bash
+
+Toolbox? -- I can't run docker inside a toolbox.  
+
