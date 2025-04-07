@@ -17,8 +17,7 @@ This blog records the road Corneast has walked from Spring MVC to Netty.
 
 ## Steps
 ### Import Dependency
-It's easy when using Spring Boot.  
-
+Maven dependency of Netty:  
 ```xml
 <dependency>
 	<groupId>io.netty</groupId>
