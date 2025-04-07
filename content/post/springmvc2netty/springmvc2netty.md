@@ -74,11 +74,13 @@ protected void initChannel(SocketChannel ch) {
 });
 ```
 
+### Strategy Pattern
 There are three primitives in Corneast: register, reduce and query. Correspondingly, I need three handlers.  
 
 Here I choose Strategy Pattern to implement the logic. The `RequestRouteHandler` holds all the strategies and choose corresponding one to handle the request.  
 
-A trick to get all the strategies is using injection of the Spring container. The key of the injected `Map` is the bean name and the value is the concrete strategy.  
+A trick to get all the strategies is using injection of the Spring container.  
+The key of the injected `Map` is the bean name and the value is the concrete strategy.  
 
 We should make sure the bean name and the request type are the same.  
 
@@ -116,7 +118,7 @@ public interface RequestHandlingStrategy {
 ```
 
 One concrete implementation:  
-```
+```java
 @Component("reduce")
 public class ReduceRequestHandlingStrategy implements RequestHandlingStrategy {
 
@@ -187,7 +189,7 @@ As you can see, some objects are reused to save the spending of creating new obj
 
 Maybe more optimizations will be conducted here in the future.  
 
----
+### Tests
 For the convenience of tests, I wrote a util class to generate request binary files.  
 
 It will run when the application starts.  
