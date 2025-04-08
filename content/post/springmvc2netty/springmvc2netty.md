@@ -304,6 +304,24 @@ try {
 }
 ```
 
+## Performance Improvement
+### Spring MVC
+
+| Label          | # Samples | Average | Median | 90% Line | 95% Line | 99% Line | Min | Max | Error % | Throughput   | Received KB/sec | Sent KB/sec |
+|----------------|-----------|---------|--------|----------|----------|----------|-----|-----|---------|--------------|-----------------|-------------|
+| HTTP Request   | 1000000   | 1       | 1      | 2        | 2        | 3        | 0   | 204 | 0.000%  | 7718.25290   | 1929.58         | 1515.01     |
+| TOTAL          | 1000000   | 1       | 1      | 2        | 2        | 3        | 0   | 204 | 0.000%  | 7718.25290   | 1929.58         | 1515.01     |
+
+### Netty
+
+| Label           | # Samples | Average | Median | 90% Line | 95% Line | 99% Line | Min | Max | Error % | Throughput    | Received KB/sec | Sent KB/sec |
+|-----------------|-----------|---------|--------|----------|----------|----------|-----|-----|---------|---------------|-----------------|-------------|
+| JSR223 Sampler  | 1,012,117 | 1       | 1      | 2        | 3        | 5        | 0   | 424 | 0.000%  | 15,464.20877  | 0.00            | 0.00        |
+| TOTAL           | 1,012,117 | 1       | 1      | 2        | 3        | 5        | 0   | 424 | 0.000%  | 15,464.20877  | 0.00            | 0.00        |
+
+### Observations
+Netty outperforms Spring MVC by about **2 times**.
+
 ## Conclusion
 After the upgrade, Spring Framework serves as an IoC container meanwhile Netty routes and handles the requests.  
 
