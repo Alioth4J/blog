@@ -56,7 +56,7 @@ params:
 
     sidebar:
         emoji: ⚡
-        subtitle: OPEN ALIOTH
+        subtitle: The Matrix has you...
         avatar:
             enabled: true
             local: true
