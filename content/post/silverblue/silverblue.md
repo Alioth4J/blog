@@ -99,7 +99,7 @@ Permanently disable:
 ```bash
 sudo rpm-ostree kargs --append enforcing=0
 ```
-or
+or  
 ```bash
 sudo rpm-ostree kargs --edit
 ```
