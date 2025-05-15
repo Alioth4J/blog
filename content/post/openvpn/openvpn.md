@@ -48,6 +48,8 @@ vi /etc/openvpn/server.conf
 
 We use **TCP** and **443 Port**.  
 
+> Update: No matter TCP or UDP and what port is used, the connection will fail after several connections. The reason is clear.  
+
 In the file:  
 ```txt
 port 443
