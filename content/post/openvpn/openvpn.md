@@ -1,6 +1,6 @@
 ---
 title: OpenVPN Quick Set
-description: Follow the white rabbit.
+description: Follow the white rabbit
 date: 2025-05-15
 slug: openvpn
 image: 
@@ -104,10 +104,10 @@ systemctl status openvpn@server
 #### Getting Certificates and Keys
 Use `scp` command to get them from the server.  
 They are:  
-- /etc/openvpn/easy-rsa/pki/ca.crt
-- /etc/openvpn/easy-rsa/pki/issued/client1.crt
-- /etc/openvpn/easy-rsa/pki/private/client1.key
-- /etc/openvpn/easy-rsa/ta.key
+- /etc/openvpn/easy-rsa/pki/ca.crt
+- /etc/openvpn/easy-rsa/pki/issued/client1.crt
+- /etc/openvpn/easy-rsa/pki/private/client1.key
+- /etc/openvpn/easy-rsa/ta.key
 
 #### SELinux
 OS: Silverblue  
