@@ -89,3 +89,19 @@ Here are some replacements of docker-compose:
 
 Toolbox? -- I can't run docker inside a toolbox.  
 
+### SELinux
+Temporarily disable:  
+```bash
+sudo setenforce 0
+```
+
+Permanently disable:  
+```bash
+sudo rpm-ostree kargs --append enforcing=0
+```
+or
+```bash
+sudo rpm-ostree kargs --edit
+```
+and append `enforcing=0`.  
+
