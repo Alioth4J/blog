@@ -46,14 +46,14 @@ openvpn --genkey --secret ta.key
 vi /etc/openvpn/server.conf
 ```
 
-We use **TCP** and **443 Port**.  
+Note that no matter TCP or UDP and what port is used, it's unable to use OpenVPN directly. The reason is clear.  
 
-> Update: No matter TCP or UDP and what port is used, the connection will fail after several connections. The reason is clear.  
+Despite this, please do not use default port as someone may actively probes server ports. **TCP** and **443 Port** or **UDP** and **53 Port** are appropriate.  
 
-In the file:  
+In this config file:  
 ```txt
-port 443
-proto tcp
+port 53
+proto udp
 dev tun
 
 ca /etc/openvpn/easy-rsa/pki/ca.crt
