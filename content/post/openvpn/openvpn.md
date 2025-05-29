@@ -135,7 +135,7 @@ Most configurations are in `Identity`.
 ```
 Gateway: server ip
 Authentication Type: Certificates; and select the corresponding files in the following lines
-Advanced -> General -> Use custom gateway port 443; Use a TCP connection
+Advanced -> General -> Use custom gateway port 53; if using tcp, also configure here
 Advanced -> TLS Authentication -> Additional TLS authentication or encryption -> Mode: TLS auth; Key File: Select ta.key; Key Direction: 1
 ```
 
