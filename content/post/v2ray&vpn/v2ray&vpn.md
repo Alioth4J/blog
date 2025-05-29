@@ -30,3 +30,6 @@ Setup V2Ray and VPN.
 
 ### Order of Bootstrap
 You are supposed to launch the V2Ray client first, and only then initiate the VPN connection. This is because V2Ray, being used as the outer layer, needs to establish a secure channel before the VPN attempts to create its tunnel within it.  
+
+### About firewalld
+It seems that the ports of both v2ray and openvpn should be opened, because of v2ray's proxy mechanism.  

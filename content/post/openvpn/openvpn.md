@@ -92,7 +92,15 @@ iptables -t nat -A POSTROUTING -o eth0 -s 10.8.0.0/24 -j MASQUERADE
 ```
 
 #### Firewall
-I do not use firewall...  
+```bash
+firewall-cmd --add-port=53/udp --zone=public --permanent
+firewall-cmd --reload
+```
+
+Check existing opened ports:  
+```bash
+firewall-cmd --list-ports
+```
 
 #### Starting the Service
 ```bash
