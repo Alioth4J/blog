@@ -73,9 +73,12 @@ client-to-client
 
 persist-key
 persist-tun
-status openvpn-status.log
-verb 3
+log /dev/null
+status /dev/null
+verb 0
 ```
+
+Record no log.  
 
 #### Ip Forward
 ```bash
