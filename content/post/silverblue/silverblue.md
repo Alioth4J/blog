@@ -105,3 +105,29 @@ sudo rpm-ostree kargs --edit
 ```
 and append `enforcing=0`.  
 
+### Firefox
+Silverblue comes with Firefox preinstalled, but it recommends region-specific websites in the search bar based on the initial IP address and they cannot be removed. **It is outrageous that a browser bundled with a free and open OS would pull something like this!** So I removed Firefox.  
+
+```bash
+sudo rpm-ostree override remove firefox
+```
+
+Then you will see something like this:  
+```bash
+error: Could not depsolve transaction; 1 problem detected:
+ Problem: package firefox-langpacks-139.0.4-1.fc42.x86_64 from @System requires firefox = 139.0.4-1.fc42, but none of the providers can be installed
+  - conflicting requests
+```
+
+According to the response, add another package to remove. Run:  
+```bash
+sudo rpm-ostree override remove firefox firefox-langpacks-139.0.4-1.fc42.x86_64
+```
+
+Needless to say, reboot:  
+```bash
+systemctl reboot
+```
+
+At last, you can install another browser, for instance, LibreWolf.  
+
