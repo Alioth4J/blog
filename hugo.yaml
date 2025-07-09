@@ -48,7 +48,7 @@ params:
 
     footer:
         since: 2023
-        customText: Who comes from mountains, rivers, lakes and seas, yet is confined to days, nights, kitchen and love?
+        customText: "Decouple with me!" -- said Java.
 
     dateFormat:
         published: Jan 02, 2006
