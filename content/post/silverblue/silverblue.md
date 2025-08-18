@@ -71,6 +71,23 @@ then reboot
 sudo systemctl reboot
 ```
 
+#### Remove Nvidia Driver
+The nvidia driver may not be able to use after upgrading of the OS. If you want just to abandon it, follow the steps to rollback.  
+
+Remove packages:  
+```bash
+$ sudo rpm-ostree uninstall akmod-nvidia xorg-x11-drv-nvidia xorg-x11-drv-nvidia-cuda
+$ sudo rpm-ostree uninstall rpmfusion-free-release rpmfusion-nonfree-release
+```
+
+Remove kernel args:  
+```bash
+$ sudo rpm-ostree kargs --editor
+```
+remove `rd.driver.blacklist=nouveau`, `modprobe.blacklist=nouveau`, `nvidia-drm.modeset=1`.  
+
+then reboot.  
+
 ### `~` location
 Your `~` is `/var/home/user`, not `/home/user`.  
 ```bash
