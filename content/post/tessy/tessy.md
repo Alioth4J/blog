@@ -11,8 +11,8 @@ categories:
 Nothing to say, just go straight into it.  
 
 ## Environment
-OS: Windows 10
-Tessy version: 4.3
+OS: Windows 10  
+Tessy version: 4.3  
 
 ## Fault Tolerence
 > **The golden rule of atomicity: Never modify the only copy!**
