@@ -55,7 +55,7 @@ Add enum type as `int` and enum objects as numbers.
 ### Compilation Error in Tessy-generated Files
 Look into that file, add the lacking one.  
 
-### error: typedef redefinition with different types '<type1>' vs '<type2>'
+### error: typedef redefinition with different types '<a_type>' vs '<another_type>'
 Pay attention to the order of included headers, which make sense.  
 
 My trick is placing the cross-compilation tools in the first place.  
