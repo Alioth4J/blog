@@ -130,8 +130,8 @@ Test cases may be lost.
 ### REMOVED: This test object has been removed (or renamed). You may assign the test datato another existing object and perform a reuse in the IDA perspective.
 Remove non-existing functions before changing source files.  
 
-### Stubbing for Side Effects
-For some cases, for instance, the tested function has a `void` return value, you need to stub for side effects.  
+### Assert Side Effects
+For some cases, for instance, the tested function has a `void` return value, you need to assert side effects.  
 
 ## About Unit Test
 You may fall into the trap of pursuing high coverage rate and pretty reports when using Tessy.  
