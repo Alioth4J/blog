@@ -24,9 +24,9 @@ You don't want a volatile live USB that forgets everything on reboot. You want a
 
 The hardware matters. I choose Kingston Data Traveler 64GB as the USB stick with USB 3.x for the portable OS.  
 
-About OS, 
-
 ## Operating Steps
+Things are quite similar to installing a regular operationg system. The difference is that some unexpected issues may occur due to different environment.  
+
 ### Download `iso` File
 This indeed means choose your operating systems.  
 
