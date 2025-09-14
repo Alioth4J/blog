@@ -9,7 +9,7 @@ categories:
 ---
 
 ## Algorithm Template
-1. Declare variables。
+1. Declare variables.
 2. Iterate right border.
 3. Add right border into sliding window.
 4. Moving the left border to achieve a border situation.
