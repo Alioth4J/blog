@@ -8,7 +8,7 @@ categories:
     - Algorithm
 ---
 
-## Algorithm Template
+## Sliding Window / Two Pointers
 1. Declare variables.
 2. Iterate right border. `for (int right = 0; right < n; right++)`
 3. Add right border into sliding window.
