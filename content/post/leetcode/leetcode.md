@@ -18,6 +18,10 @@ categories:
 
 ## Binary Search
 ```java
+    /**
+     * Find the index of the first num that
+     * is greater than or equal to <code>target</code>.
+     */
     private int biSearch(int[] nums, int target) {
         int left = 0;
         int right = nums.length - 1;
