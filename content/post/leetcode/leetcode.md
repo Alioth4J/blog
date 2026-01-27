@@ -45,3 +45,43 @@ categories:
     }
 ```
 
+## Monotonic Stack
+```java
+class Solution {
+    private int[][] nearestGreater(int[] nums) {
+        int n = nums.length;
+        
+        int[] left = new int[n];
+        Deque<Integer> st = new ArrayDeque<>();
+        st.push(-1); // sentinel (optional)
+        for (int i = 0; i < n; i++) {
+            int x = nums[i];
+            while (st.size() > 1 && nums[st.peek()] <= x) {
+                st.pop();
+            }
+            left[i] = st.peek();
+            st.push(i);
+        }
+
+        int[] right = new int[n];
+        st.clear();
+        st.push(n); // sentinel (optional)
+        for (int i = n - 1; i >= 0; i--) {
+            int x = nums[i];
+            while (st.size() > 1 && nums[st.peek()] <= x) {
+                st.pop();
+            }
+            right[i] = st.peek();
+            st.push(i);
+        }
+        
+        return new int[][]{left, right};
+    }
+}
+```
+
+- What's in the stack? index or number?
+- [left to right] or [right to left]
+- According to the concrete, choose `<`, `<=`, `>`, `>=`
+- Sentinel is optional, which can avoid `stack.isEmpty()`
+
