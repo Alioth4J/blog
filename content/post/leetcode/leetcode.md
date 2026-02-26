@@ -180,7 +180,7 @@ class Solution {
 }
 ```
 
-## Undirected Graph
+## Graph
 ```java
 List<Integer>[] g = new ArrayList[n];
 Arrays.setAll(g, _ -> new ArrayList<>());
@@ -188,10 +188,10 @@ for (int[] e : edges) {
     int x = e[0];
     int y = e[1];
     g[x].add(y);
-    g[y].add(x);
+    g[y].add(x); // if undirected graph
 }
 ```
-
+or  
 ```java
 List<Integer>[] g = new ArrayList[n];
 Arrays.setAll(g, _ -> new ArrayList<>());
@@ -199,7 +199,7 @@ for (int i = 0; i < n; i++) {
     for (int j = 0; j < n; j++) {
         if (isConnected[i][j] == 1) {
             g[i].add(j);
-            g[j].add(i);
+            g[j].add(i); // if undirected graph
         }
     }
 }
