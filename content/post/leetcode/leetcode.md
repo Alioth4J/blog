@@ -85,7 +85,7 @@ class Solution {
 - According to the concrete, choose `<`, `<=`, `>`, `>=`
 - Sentinel is optional, which can avoid `stack.isEmpty()`
 
-## BFS
+## BFS (grid)
 ```java
 class Solution {
 
@@ -134,7 +134,7 @@ class Solution {
 }
 ```
 
-## DFS
+## DFS (grid)
 ```java
 class Solution {
 
@@ -176,7 +176,7 @@ class Solution {
         dfs(i, j + 1);
         dfs(i, j - 1);
     }
-
+    
 }
 ```
 
