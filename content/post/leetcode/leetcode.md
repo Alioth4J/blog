@@ -205,3 +205,50 @@ for (int i = 0; i < n; i++) {
 }
 ```
 
+## UnionFind
+```java
+public class UnionFind {
+
+    private int[] parent;
+    private double[] weight;
+
+    public UnionFind(int n) {
+        parent = new int[n];
+        weight = new double[n];
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+            weight[i] = 1.0d;
+        }
+    }
+
+    public void union(int x, int y, double value) {
+        int rootX = find(x);
+        int rootY = find(y);
+        if (rootX == rootY) {
+            return;
+        }
+        parent[rootX] = rootY;
+        weight[rootX] = weight[y] * value / weight[x];
+    }
+
+    public int find(int x) {
+        if (parent[x] != x) {
+            int originalParent = parent[x];
+            parent[x] = find(parent[x]);
+            weight[x] *= weight[originalParent];
+        }
+        return parent[x];
+    }
+
+    public double isConnected(int x, int y) {
+        int rootX = find(x);
+        int rootY = find(y);
+        if (rootX == rootY) {
+            return weight[x] / weight[y];
+        } else {
+            return -1.0;
+        }
+    }
+
+}
+```
