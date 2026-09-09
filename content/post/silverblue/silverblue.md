@@ -66,7 +66,7 @@ then use `nvidia-smi` to check whether it is okay, if not, also need the followi
 ```bash
 sudo rpm-ostree kargs --append=rd.driver.blacklist=nouveau --append=modprobe.blacklist=nouveau --append=nvidia-drm.modeset=1
 ```
-then reboot
+then reboot  
 ```bash
 sudo systemctl reboot
 ```
@@ -109,7 +109,7 @@ sudo rpm-ostree install \
 ```
 
 then add `kargs`:  
-``bash
+```bash
 sudo rpm-ostree kargs --append=rd.driver.blacklist=nouveau --append=modprobe.blacklist=nouveau --append=nvidia-drm.modeset=1
 ```
 
