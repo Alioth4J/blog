@@ -43,7 +43,7 @@ Silverblue 的设计充满魅力，不要犹豫去使用！
 #### Useful Links
 - [Configuration - RPM Fusion](https://rpmfusion.org/Configuration)  
 - [Howto/NVIDIA - RPM Fusion](https://rpmfusion.org/Howto/NVIDIA#OSTree_.28Silverblue.2FKinoite.2Fetc.29)  
-#### Steps
+#### Steps for Supported distros
 *Note: Secure boot MAY need to be turned off*  
 
 First of all, enable repository
@@ -69,6 +69,48 @@ sudo rpm-ostree kargs --append=rd.driver.blacklist=nouveau --append=modprobe.bla
 then reboot
 ```bash
 sudo systemctl reboot
+```
+
+#### Steps for EOL distros
+For EOL distros, such as fedora silverblue 42, some packages need to be installed manually.  
+
+Reboot when needed.  
+
+```bash
+sudo rpm-ostree install \
+  https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-42.noarch.rpm \
+  https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-42.noarch.rpm
+```
+
+I got this when executing the `sudo rpm-ostree install akmod-nvidia`:  
+```bash
+error: Downloading from 'updates-archive': Cannot download kernel-devel-matched-6.19.14-101.fc42.x86_64.rpm: All mirrors were tried; Last error: Status code: 404 for https://fedoraproject-updates-archive.fedoraproject.org/fedora/42/x86_64/kernel-devel-6.19.14-101.fc42.x86_64.rpm (IP: xx.xx.xx.xx)
+```
+
+You need to install the packages according to your kernel version, for example, for mine:  
+```bash
+wget https://kojipkgs.fedoraproject.org/packages/kernel/6.19.14/101.fc42/x86_64/kernel-devel-6.19.14-101.fc42.x86_64.rpm
+wget https://kojipkgs.fedoraproject.org/packages/kernel/6.19.14/101.fc42/x86_64/kernel-devel-matched-6.19.14-101.fc42.x86_64.rpm
+```
+
+and install them:  
+```bash
+sudo rpm-ostree install \
+  ./kernel-devel-6.19.14-101.fc42.x86_64.rpm \
+  ./kernel-devel-matched-6.19.14-101.fc42.x86_64.rpm
+```
+
+then install:  
+```bash
+sudo rpm-ostree install \
+  akmod-nvidia \
+  xorg-x11-drv-nvidia \
+  xorg-x11-drv-nvidia-cuda
+```
+
+then add `kargs`:  
+``bash
+sudo rpm-ostree kargs --append=rd.driver.blacklist=nouveau --append=modprobe.blacklist=nouveau --append=nvidia-drm.modeset=1
 ```
 
 #### Remove Nvidia Driver
