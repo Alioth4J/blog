@@ -190,3 +190,24 @@ systemctl reboot
 
 At last, you can install another browser, for instance, LibreWolf.  
 
+### Intellij IDEA (flatpak) and claude code
+If `claude` not found or meeting:  
+```bash
+bash-5.3$ flatpak-spawn --host bash
+Portal call failed: org.freedesktop.DBus.Error.ServiceUnknown
+Hint: --host only works when the Flatpak is allowed to talk to org.freedesktop.Flatpak
+```
+
+then executing this on host machine:  
+```bash
+flatpak override --user \
+  --talk-name=org.freedesktop.Flatpak \
+  com.jetbrains.IntelliJ-IDEA-Community
+```
+
+and in IDEA's Settings -> Tools -> Terminal, set:  
+```bash
+/usr/bin/env -- flatpak-spawn --host bash
+```
+
+
