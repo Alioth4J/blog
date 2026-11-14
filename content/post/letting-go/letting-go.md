@@ -1,7 +1,7 @@
 ---
 title: My Letting Go is Killing Myself in the Past
 description: Goodbye human-coding
-date: 2026-11-15
+date: 2026-11-14
 slug: letting-go
 image: 
 categories:
